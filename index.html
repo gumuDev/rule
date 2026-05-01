@@ -2,34 +2,39 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Pippo Pizza - Ruleta Ajustada</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pippo Pizza - Ruleta Responsiva</title>
     <style>
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             background-color: #121212;
             margin: 0;
             font-family: 'Arial', sans-serif;
+            overflow: hidden; /* Evita scrolls raros en móvil */
         }
 
         .contenedor-principal {
             position: relative;
-            width: 500px; /* Tamaño del marco */
-            height: 500px;
+            /* Tamaño responsivo: 90% del ancho de pantalla, máximo 500px */
+            width: 90vw;
+            height: 90vw;
+            max-width: 500px;
+            max-height: 500px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* Puntero/Flecha superior */
+        /* Puntero ajustado para escalas */
         .puntero {
             position: absolute;
-            top: -20px;
-            width: 40px;
-            height: 50px;
+            top: -5%;
+            width: 10%;
+            height: 12%;
             background: #FFD700;
             clip-path: polygon(50% 100%, 0 0, 100% 0);
             z-index: 10;
@@ -37,29 +42,30 @@
             filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5));
         }
 
-        /* La Ruleta Física */
         .ruleta-disco {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            /* Ajuste de imagen para que entre TODO el diseño */
-            background-image: url('uno.jpeg');
-            background-size: contain; /* Cambiado a contain para que no se corte nada */
+            background-image: url('uno.png');
+            background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
             transition: transform 5s cubic-bezier(0.2, 0, 0.1, 1);
-            
-            /* Sombra para dar efecto de profundidad */
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
         }
 
         .controles {
-            margin-top: 40px;
+            margin-top: 5vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
 
         button {
-            padding: 18px 50px;
-            font-size: 1.4rem;
+            width: 80%;
+            max-width: 300px;
+            padding: 20px;
+            font-size: 1.5rem;
             font-weight: 900;
             background: #d32f2f;
             color: white;
@@ -67,12 +73,21 @@
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 6px 0 #8b0000;
-            transition: all 0.1s;
+            /* Evita el color azul al tocar en Android/iOS */
+            -webkit-tap-highlight-color: transparent;
         }
 
         button:active {
             transform: translateY(4px);
             box-shadow: 0 2px 0 #8b0000;
+        }
+
+        /* Ajuste para pantallas muy pequeñas (celulares viejitos) */
+        @media (max-width: 350px) {
+            button {
+                font-size: 1.2rem;
+                padding: 15px;
+            }
         }
     </style>
 </head>
@@ -84,20 +99,26 @@
     </div>
 
     <div class="controles">
-        <button onclick="lanzar()">¡GIRAR AHORA!</button>
+        <button onclick="lanzar()">¡GIRAR!</button>
     </div>
 
     <script>
         let gradosTotales = 0;
+        let girando = false;
 
         function lanzar() {
-            const ruleta = document.getElementById('ruleta');
+            if (girando) return; // Evita múltiples clics mientras gira
             
-            // Giro aleatorio: Mínimo 5 vueltas (1800deg) + ángulo al azar
-            const extra = Math.floor(Math.random() * 360) + 1800;
+            girando = true;
+            const ruleta = document.getElementById('ruleta');
+            const extra = Math.floor(Math.random() * 360) + 2160; // 6 vueltas mínimas
             gradosTotales += extra;
 
             ruleta.style.transform = `rotate(${gradosTotales}deg)`;
+
+            setTimeout(() => {
+                girando = false;
+            }, 5000);
         }
     </script>
 </body>
