@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pippo Pizza - Ruleta Ajustada</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #121212;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .contenedor-principal {
+            position: relative;
+            width: 500px; /* Tamaño del marco */
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Puntero/Flecha superior */
+        .puntero {
+            position: absolute;
+            top: -20px;
+            width: 40px;
+            height: 50px;
+            background: #FFD700;
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            z-index: 10;
+            border: 2px solid #000;
+            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5));
+        }
+
+        /* La Ruleta Física */
+        .ruleta-disco {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            /* Ajuste de imagen para que entre TODO el diseño */
+            background-image: url('uno.jpeg');
+            background-size: contain; /* Cambiado a contain para que no se corte nada */
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: transform 5s cubic-bezier(0.2, 0, 0.1, 1);
+            
+            /* Sombra para dar efecto de profundidad */
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        .controles {
+            margin-top: 40px;
+        }
+
+        button {
+            padding: 18px 50px;
+            font-size: 1.4rem;
+            font-weight: 900;
+            background: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #8b0000;
+            transition: all 0.1s;
+        }
+
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #8b0000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor-principal">
+        <div class="puntero"></div>
+        <div id="ruleta" class="ruleta-disco"></div>
+    </div>
+
+    <div class="controles">
+        <button onclick="lanzar()">¡GIRAR AHORA!</button>
+    </div>
+
+    <script>
+        let gradosTotales = 0;
+
+        function lanzar() {
+            const ruleta = document.getElementById('ruleta');
+            
+            // Giro aleatorio: Mínimo 5 vueltas (1800deg) + ángulo al azar
+            const extra = Math.floor(Math.random() * 360) + 1800;
+            gradosTotales += extra;
+
+            ruleta.style.transform = `rotate(${gradosTotales}deg)`;
+        }
+    </script>
+</body>
+</html>
